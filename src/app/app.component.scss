@@ -2,15 +2,16 @@
     box-sizing: border-box;
     user-select: none;
 }
-
 .grid-container {
+    background: white;
+    margin-top: 20px;
     display: grid;
     grid-template-columns: auto auto auto;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
     grid-gap: 10px;
-    width: 340px;
+    width: fit-content;
 }
 
 .grid-item {
@@ -26,4 +27,23 @@
 
 .grid-item:hover {
     background: #ccc;
+}
+
+.right-corner {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    kbd {
+        font-size: 20px;
+    }
+}
+
+.try-another {
+    display: block;
+    margin: 0 auto;
 }
