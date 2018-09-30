@@ -1,4 +1,4 @@
-<app-modal *ngIf="!isWon() && response && dataloaded" (modalResponse)="modalResponse($event)"></app-modal>
+<app-modal *ngIf="isWon() && response && dataloaded" (modalResponse)="modalResponse($event)"></app-modal>
 <div class="container">
   <h1 class="text-center">Eight Puzzle</h1>
   <button class="btn btn-light try-another" (click)="setPuzzle()">Try Another</button>
