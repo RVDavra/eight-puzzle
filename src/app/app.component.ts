@@ -7,7 +7,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'eight-puzzle';
+  title = "You Won";
+  message = "You won this game would you like to play another game";
 
   pString = "A12345678_"
 
@@ -20,6 +21,12 @@ export class AppComponent implements OnInit {
   dataloaded = false;
 
   jsonData = [];
+
+  states = [];
+
+  isStuck = false;
+
+  myInterval;
 
   @ViewChildren('p') puzzle;
 
@@ -54,21 +61,27 @@ export class AppComponent implements OnInit {
     } else {
       let p = this.puzzle.toArray();
       let undIndex = this.pString.indexOf('_');
-      if(this.first < undIndex) {
-        p[this.first-1].nativeElement.classList.add(this.selectClass);
+      if (this.first < undIndex) {
+        p[this.first - 1].nativeElement.classList.add(this.selectClass);
       } else {
-        p[this.first-2].nativeElement.classList.add(this.selectClass);
+        p[this.first - 2].nativeElement.classList.add(this.selectClass);
       }
     }
   }
 
   isWon() {
-    return this.pString === "A12345678_"
+    return this.pString === "A12345678_";
   }
 
   modalResponse(event) {
-    if(event) {
-      this.setPuzzle();
+    if (event) {
+      if(!this.isStuck) {
+        this.setPuzzle();
+      } else {
+        this.isStuck = false;
+        this.title = "You Won";
+        this.message = "You won this game would you like to play another game";
+      }
     } else {
       this.response = false;
     }
@@ -80,8 +93,90 @@ export class AppComponent implements OnInit {
   }
 
   setPuzzle() {
+    this.title = "You Won";
+    this.message = "You won this game would you like to play another game";
+    this.isStuck = false;
+    this.response = true;
+    this.myInterval = undefined;
+    this.states = [];
     this.dataloaded = true;
     let selected = Math.floor(Math.random() * (this.jsonData.length - 1));
     this.pString = "A" + this.jsonData[selected];
+    this.states.push(this.pString);
+  }
+
+  calculateHeuristic(tempState: string) {
+    let count = 1;
+    let solution = "A12345678_";
+    for (let i = 1; i < tempState.length; i++) {
+      if (solution[i] === tempState[i]) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  tryAi() {
+    this.myInterval = setInterval(() => {
+      this.findSolution();
+    }, 10);
+  }
+
+  findSolution() {
+    let undIndex = this.pString.indexOf('_');
+    let upIndex = undIndex - 3;
+    let downIndex = undIndex + 3;
+    let leftIndex = undIndex - 1;
+    let rightIndex = undIndex + 1;
+    let upString;
+    let downString;
+    let leftString;
+    let rightString;
+    let nextStates: string[] = [];
+    if (upIndex > 1) {
+      let temp = this.pString[upIndex];
+      upString = this.pString.replace('_', temp);
+      upString = upString.replace(/./g, (c, i) => i == upIndex ? '_' : c);
+      nextStates.push(upString);
+    }
+    if (downIndex < 10) {
+      let temp = this.pString[downIndex];
+      downString = this.pString.replace('_', temp);
+      downString = downString.replace(/./g, (c, i) => i == downIndex ? '_' : c);
+      nextStates.push(downString);
+    }
+    if ((leftIndex) % 3 > 0) {
+      let temp = this.pString[leftIndex];
+      leftString = this.pString.replace('_', temp);
+      leftString = leftString.replace(/./g, (c, i) => i == leftIndex ? '_' : c);
+      nextStates.push(leftString);
+    }
+    if ((rightIndex - 1) % 3 != 0) {
+      let temp = this.pString[rightIndex];
+      rightString = this.pString.replace('_', temp);
+      rightString = rightString.replace(/./g, (c, i) => i == rightIndex ? '_' : c);
+      nextStates.push(rightString);
+    }
+    let nextState;
+    for (const state of nextStates) {
+      if (!nextState && !this.states.includes(state)) {
+        nextState = state;
+      }
+      if (nextState && this.calculateHeuristic(nextState) < this.calculateHeuristic(state) && !this.states.includes(state)) {
+        nextState = state;
+      }
+    }
+    if (!nextState || nextState === this.pString) {
+      clearInterval(this.myInterval);
+      this.title = "AI Stuck";
+      this.message = "Sorry i can't solve this puzzle click no if you want to try solve it by your self";
+      this.isStuck = true;
+    } else {
+      this.pString = nextState;
+      this.states.push(nextState);
+      if(this.isWon()) {
+        clearInterval(this.myInterval);
+      }
+    }
   }
 }

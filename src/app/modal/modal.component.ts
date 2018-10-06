@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -9,6 +9,9 @@ export class ModalComponent implements OnInit {
 
   @Output('modalResponse') modalResponse = new EventEmitter();
   
+  @Input() title = "";
+  @Input() message = "";
+
   constructor() { }
 
   ngOnInit() {

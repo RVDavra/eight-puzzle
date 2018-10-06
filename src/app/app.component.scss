@@ -2,9 +2,14 @@
     box-sizing: border-box;
     user-select: none;
 }
+
+.all-container {
+    padding: 0;
+}
+
 .grid-container {
     background: white;
-    margin-top: 20px;
+    margin: 20px auto;
     display: grid;
     grid-template-columns: auto auto auto;
     border: 1px solid #ccc;
@@ -44,6 +49,10 @@
 }
 
 .try-another {
-    display: block;
+    // display: block;
+    width: fit-content;
     margin: 0 auto;
+    button {
+        margin: 10px;
+    }
 }

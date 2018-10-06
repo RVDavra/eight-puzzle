@@ -1,33 +1,36 @@
-<app-modal *ngIf="isWon() && response && dataloaded" (modalResponse)="modalResponse($event)"></app-modal>
-<div class="container">
+<app-modal *ngIf="(isWon() || isStuck) && response && dataloaded" [title]="title" [message]="message" (modalResponse)="modalResponse($event)"></app-modal>
+<div class="container all-container">
   <h1 class="text-center">Eight Puzzle</h1>
-  <button class="btn btn-light try-another" (click)="setPuzzle()">Try Another</button>
+  <div class="try-another">
+    <button class="btn btn-light" (click)="setPuzzle()">Try Another</button>
+    <button class="btn btn-light" (click)="tryAi()">Computer</button>
+  </div>
   <div *ngIf="!dataloaded" class="text-center">Data is not loaded yet</div>
-  <div class="grid-container container" *ngIf="dataloaded">
+  <div class="grid-container" *ngIf="dataloaded">
     <div #p class="grid-item" *ngIf="pString[1] != '_'" (click)="puzzleClick(1)">{{pString[1]}}</div>
     <div *ngIf="pString[1] === '_'"></div>
-    
+
     <div #p class="grid-item" *ngIf="pString[2] != '_'" (click)="puzzleClick(2)">{{pString[2]}}</div>
     <div *ngIf="pString[2] === '_'"></div>
-    
+
     <div #p class="grid-item" *ngIf="pString[3] != '_'" (click)="puzzleClick(3)">{{pString[3]}}</div>
     <div *ngIf="pString[3] === '_'"></div>
-    
+
     <div #p class="grid-item" *ngIf="pString[4] != '_'" (click)="puzzleClick(4)">{{pString[4]}}</div>
     <div *ngIf="pString[4] === '_'"></div>
-    
+
     <div #p class="grid-item" *ngIf="pString[5] != '_'" (click)="puzzleClick(5)">{{pString[5]}}</div>
     <div *ngIf="pString[5] === '_'"></div>
-    
+
     <div #p class="grid-item" *ngIf="pString[6] != '_'" (click)="puzzleClick(6)">{{pString[6]}}</div>
     <div *ngIf="pString[6] === '_'"></div>
-    
+
     <div #p class="grid-item" *ngIf="pString[7] != '_'" (click)="puzzleClick(7)">{{pString[7]}}</div>
     <div *ngIf="pString[7] === '_'"></div>
-    
+
     <div #p class="grid-item" *ngIf="pString[8] != '_'" (click)="puzzleClick(8)">{{pString[8]}}</div>
     <div *ngIf="pString[8] === '_'"></div>
-    
+
     <div #p class="grid-item" *ngIf="pString[9] != '_'" (click)="puzzleClick(9)">{{pString[9]}}</div>
     <div *ngIf="pString[9] === '_'"></div>
   </div>
