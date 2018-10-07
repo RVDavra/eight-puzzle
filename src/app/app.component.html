@@ -4,6 +4,7 @@
   <div class="try-another">
     <button class="btn btn-light" (click)="setPuzzle()">Try Another</button>
     <button class="btn btn-light" (click)="tryAi()">Computer</button>
+    <input type="number" #interval>
   </div>
   <div *ngIf="!dataloaded" class="text-center">Data is not loaded yet</div>
   <div class="grid-container" *ngIf="dataloaded">

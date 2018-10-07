@@ -28,6 +28,8 @@ export class AppComponent implements OnInit {
 
   myInterval;
 
+  @ViewChild('interval') interval: ElementRef;
+
   @ViewChildren('p') puzzle;
 
   constructor(private http: HttpClient) { }
@@ -117,9 +119,11 @@ export class AppComponent implements OnInit {
   }
 
   tryAi() {
+    let time = +this.interval.nativeElement.value;
+    this.states = [];
     this.myInterval = setInterval(() => {
       this.findSolution();
-    }, 10);
+    }, time? time : 10);
   }
 
   findSolution() {
