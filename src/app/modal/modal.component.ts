@@ -12,6 +12,8 @@ export class ModalComponent implements OnInit {
   @Input() title = "";
   @Input() message = "";
 
+  @Input() isAI = false;
+
   constructor() { }
 
   ngOnInit() {

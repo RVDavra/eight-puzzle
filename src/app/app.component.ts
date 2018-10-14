@@ -12,19 +12,21 @@ export class AppComponent implements OnInit {
 
   pString = "A12345678_"
 
+  tmpPString = "A12345678_";
+
   selectClass = "bg-danger"
 
-  response = true;
+  isDialogVisible = false;
 
   first = null;
 
   dataloaded = false;
 
+  isAI = false;
+
   jsonData = [];
 
   states = [];
-
-  isStuck = false;
 
   myInterval;
 
@@ -35,7 +37,7 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.http.get("assets/data.json").subscribe(this.getJsonData.bind(this));
+    this.http.get("assets/new.json").subscribe(this.getJsonData.bind(this));
   }
 
   puzzleClick(number) {
@@ -69,25 +71,16 @@ export class AppComponent implements OnInit {
         p[this.first - 2].nativeElement.classList.add(this.selectClass);
       }
     }
+    if(this.isWon()) {
+      this.showDialog("You Won", "You won this game.\nwould you like to play another game?");
+    }
   }
 
   isWon() {
     return this.pString === "A12345678_";
   }
 
-  modalResponse(event) {
-    if (event) {
-      if(!this.isStuck) {
-        this.setPuzzle();
-      } else {
-        this.isStuck = false;
-        this.title = "You Won";
-        this.message = "You won this game would you like to play another game";
-      }
-    } else {
-      this.response = false;
-    }
-  }
+  
 
   getJsonData(data) {
     this.jsonData = data;
@@ -95,15 +88,13 @@ export class AppComponent implements OnInit {
   }
 
   setPuzzle() {
-    this.title = "You Won";
-    this.message = "You won this game would you like to play another game";
-    this.isStuck = false;
-    this.response = true;
+    clearInterval(this.myInterval);
     this.myInterval = undefined;
     this.states = [];
     this.dataloaded = true;
     let selected = Math.floor(Math.random() * (this.jsonData.length - 1));
     this.pString = "A" + this.jsonData[selected];
+    this.tmpPString = JSON.parse(JSON.stringify(this.pString));
     this.states.push(this.pString);
   }
 
@@ -121,6 +112,7 @@ export class AppComponent implements OnInit {
   tryAi() {
     let time = +this.interval.nativeElement.value;
     this.states = [];
+    this.pString = JSON.parse(JSON.stringify(this.tmpPString));
     this.myInterval = setInterval(() => {
       this.findSolution();
     }, time? time : 10);
@@ -172,15 +164,29 @@ export class AppComponent implements OnInit {
     }
     if (!nextState || nextState === this.pString) {
       clearInterval(this.myInterval);
-      this.title = "AI Stuck";
-      this.message = "Sorry i can't solve this puzzle click no if you want to try solve it by your self";
-      this.isStuck = true;
+      this.showDialog("AI Stuck","Sorry i can't solve this puzzle.\nclick OK to try by your self", true);
     } else {
       this.pString = nextState;
       this.states.push(nextState);
       if(this.isWon()) {
         clearInterval(this.myInterval);
+        this.showDialog("AI Won","AI Successfully solved this puzzle.\nclick OK to load another puzzle", true);
       }
+    }
+  }
+
+  showDialog(title, message, ai?) {
+    this.title = title;
+    this.message = message;
+    this.isAI = ai? true: false;
+    this.isDialogVisible = true;
+  }
+
+  modalResponse(event) {
+    this.isAI = false;
+    this.isDialogVisible = false;
+    if (event && this.isWon()) {
+      this.setPuzzle();
     }
   }
 }

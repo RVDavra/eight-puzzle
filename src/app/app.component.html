@@ -1,10 +1,10 @@
-<app-modal *ngIf="(isWon() || isStuck) && response && dataloaded" [title]="title" [message]="message" (modalResponse)="modalResponse($event)"></app-modal>
+<app-modal *ngIf="isDialogVisible" [title]="title" [message]="message" [isAI]="isAI" (modalResponse)="modalResponse($event)"></app-modal>
 <div class="container all-container">
   <h1 class="text-center">Eight Puzzle</h1>
-  <div class="try-another">
-    <button class="btn btn-light" (click)="setPuzzle()">Try Another</button>
-    <button class="btn btn-light" (click)="tryAi()">Computer</button>
-    <input type="number" #interval>
+  <div class="try-another row">
+    <button class="btn btn-light col" (click)="setPuzzle()">Try Another</button>
+    <button class="btn btn-light col" (click)="tryAi()">Computer</button>
+    <input type="number" class="col" #interval>
   </div>
   <div *ngIf="!dataloaded" class="text-center">Data is not loaded yet</div>
   <div class="grid-container" *ngIf="dataloaded">

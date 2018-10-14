@@ -8,10 +8,15 @@
       {{message}}
     </div>
     <hr>
-    <div class="my-modal-footer">
+    <div class="my-modal-footer" *ngIf="!isAI">
       <div class="button-container">
         <button class="btn btn-lg btn-success center" (click)="response(true)"> Yes </button>
         <button class="btn btn-lg btn-danger center" (click)="response(false)"> No </button>
+      </div>
+    </div>
+    <div class="my-modal-footer" *ngIf="isAI">
+      <div class="button-container">
+        <button class="btn btn-lg btn-success center" (click)="response(true)"> OK </button>
       </div>
     </div>
   </div>

@@ -55,4 +55,11 @@
     button, input {
         margin: 10px;
     }
+    input {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #f8f9fa;
+        vertical-align: middle;
+        text-align: center;
+    }
 }
