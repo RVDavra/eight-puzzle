@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.http.get("assets/new.json").subscribe(this.getJsonData.bind(this));
+    this.http.get("assets/data.json").subscribe(this.getJsonData.bind(this));
   }
 
   puzzleClick(number) {
